@@ -154,6 +154,10 @@ class PyMongo(object):
             app.config.setdefault(key('SOCKET_TIMEOUT_MS'), None)
             app.config.setdefault(key('CONNECT_TIMEOUT_MS'), None)
 
+            app.config.setdefault(key('SSL'), None)
+            app.config.setdefault(key('SSL_CERTFILE'), None)
+            app.config.setdefault(key('SSL_CA_CERTS'), None)
+
             # these don't have defaults
             app.config.setdefault(key('USERNAME'), None)
             app.config.setdefault(key('PASSWORD'), None)
@@ -194,6 +198,10 @@ class PyMongo(object):
         socket_timeout_ms = app.config[key('SOCKET_TIMEOUT_MS')]
         connect_timeout_ms = app.config[key('CONNECT_TIMEOUT_MS')]
 
+        ssl = app.config[key('SSL')]
+        ssl_certfile = app.confg[key('SSL_CERTFILE')]
+        ssl_ca_certs = app.confg[key('SSL_CA_CERTS')]       
+
         # document class is not supported by URI, using setdefault in all cases
         document_class = app.config.setdefault(key('DOCUMENT_CLASS'), None)
 
@@ -226,6 +234,11 @@ class PyMongo(object):
 
         if document_class is not None:
             kwargs['document_class'] = document_class
+
+        if ssl is not None:
+            kwargs['ssl'] = True
+            kwargs['ssl_certfile'] = ssl_certfile
+            kwargs['ssl_ca_certs'] = ssl_ca_certs        
 
         cx = connection_cls(*args, **kwargs)
         db = cx[dbname]
