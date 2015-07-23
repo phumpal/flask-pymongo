@@ -154,13 +154,13 @@ class PyMongo(object):
             app.config.setdefault(key('SOCKET_TIMEOUT_MS'), None)
             app.config.setdefault(key('CONNECT_TIMEOUT_MS'), None)
 
-            app.config.setdefault(key('SSL'), None)
+            app.config.setdefault(key('SSL'), False)
             app.config.setdefault(key('SSL_CERTFILE'), None)
             app.config.setdefault(key('SSL_CA_CERTS'), None)
 
             # these don't have defaults
-            app.config.setdefault(key('USERNAME'), None)
-            app.config.setdefault(key('PASSWORD'), None)
+            #app.config.setdefault(key('USERNAME'), None)
+            #app.config.setdefault(key('PASSWORD'), None)
             app.config.setdefault(key('REPLICA_SET'), None)
             app.config.setdefault(key('MAX_POOL_SIZE'), None)
 
@@ -171,12 +171,12 @@ class PyMongo(object):
 
             host = '%s:%s' % (app.config[key('HOST')], app.config[key('PORT')])
 
-        username = app.config[key('USERNAME')]
-        password = app.config[key('PASSWORD')]
-        auth = (username, password)
+        #username = app.config[key('USERNAME')]
+        #password = app.config[key('PASSWORD')]
+        #auth = (username, password)
 
-        if any(auth) and not all(auth):
-            raise Exception('Must set both USERNAME and PASSWORD or neither')
+        #if any(auth) and not all(auth):
+        #    raise Exception('Must set both USERNAME and PASSWORD or neither')
 
         read_preference = app.config[key('READ_PREFERENCE')]
         if isinstance(read_preference, text_type):
@@ -199,8 +199,8 @@ class PyMongo(object):
         connect_timeout_ms = app.config[key('CONNECT_TIMEOUT_MS')]
 
         ssl = app.config[key('SSL')]
-        ssl_certfile = app.confg[key('SSL_CERTFILE')]
-        ssl_ca_certs = app.confg[key('SSL_CA_CERTS')]       
+        ssl_certfile = app.config[key('SSL_CERTFILE')]
+        ssl_ca_certs = app.config[key('SSL_CA_CERTS')]       
 
         # document class is not supported by URI, using setdefault in all cases
         document_class = app.config.setdefault(key('DOCUMENT_CLASS'), None)
@@ -238,13 +238,13 @@ class PyMongo(object):
         if ssl is not None:
             kwargs['ssl'] = True
             kwargs['ssl_certfile'] = ssl_certfile
-            kwargs['ssl_ca_certs'] = ssl_ca_certs        
+            kwargs['ssl_ca_certs'] = ssl_ca_certs
 
         cx = connection_cls(*args, **kwargs)
         db = cx[dbname]
 
-        if any(auth):
-            db.authenticate(username, password)
+        #if any(auth):
+        #    db.authenticate(username, password)
 
         app.extensions['pymongo'][config_prefix] = (cx, db)
         app.url_map.converters['ObjectId'] = BSONObjectIdConverter
